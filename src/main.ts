@@ -97,7 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
   analyzeAndRender(ui, '');
 });
 
-document.getElementById("footer").innerHTML =
-  "\u00A9 " +
-  new Date().getFullYear() +
-  ' <a href="https://github.com/traez/agentic-password-pulse" target="_blank" rel="noopener noreferrer">Zeeofor Technologies</a> | An OpenCode Agentic AI production';
+const footerEl = document.getElementById("footer");
+if (footerEl) {
+  footerEl.innerHTML = `\u00A9 ${new Date().getFullYear()} <a href="https://github.com/traez/agentic-password-pulse" target="_blank" rel="noopener noreferrer">Zeeofor Technologies</a> | An OpenCode Agentic AI production`;
+}
