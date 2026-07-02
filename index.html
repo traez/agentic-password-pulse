@@ -4,10 +4,120 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>agentic-password-pulse</title>
+    <title>Password Pulse</title>
   </head>
   <body>
-    <div id="app"></div>
+    <div id="app">
+      <div class="dashboard">
+        <h1 class="title">Password Pulse</h1>
+
+        <div class="input-group">
+          <input
+            id="password"
+            type="password"
+            placeholder="Enter a password to analyze..."
+            maxlength="64"
+            autocomplete="new-password"
+          />
+          <button
+            id="toggle-visibility"
+            class="toggle-visibility"
+            type="button"
+            aria-label="Toggle password visibility"
+          >
+            <svg class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+              <circle cx="12" cy="12" r="3"/>
+            </svg>
+            <svg class="eye-off-icon hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/>
+              <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/>
+              <line x1="1" y1="1" x2="23" y2="23"/>
+            </svg>
+          </button>
+        </div>
+
+        <div class="meter-section">
+          <div class="meter-track">
+            <div class="meter-fill" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+          </div>
+          <div class="meter-labels">
+            <span>Very Weak</span>
+            <span>Weak</span>
+            <span>Fair</span>
+            <span>Strong</span>
+            <span>Very Strong</span>
+          </div>
+        </div>
+
+        <div class="stats-row">
+          <div class="stat">
+            <span class="stat-label">Raw Entropy</span>
+            <span class="stat-value" id="entropy-bits">0.0</span>
+          </div>
+          <div class="stat">
+            <span class="stat-label">Effective Entropy</span>
+            <span class="stat-value" id="effective-bits">0.0</span>
+          </div>
+          <div class="stat">
+            <span class="stat-label">Crack Time</span>
+            <span class="stat-value" id="crack-time">instant</span>
+          </div>
+          <div class="stat">
+            <span class="stat-label">Strength</span>
+            <span class="stat-value" id="strength-tier">Empty</span>
+          </div>
+        </div>
+
+        <div class="suggestions-section">
+          <h2>Security Checklist</h2>
+          <ul id="suggestions"></ul>
+        </div>
+
+        <div class="generator-section">
+          <h2>Password Generator</h2>
+          <div class="gen-controls">
+            <div class="gen-length-row">
+              <label for="gen-length">Length:</label>
+              <input type="range" id="gen-length" min="8" max="64" value="20" />
+              <span class="length-value" id="gen-length-display">20</span>
+            </div>
+            <div class="gen-classes">
+              <label>
+                <input type="checkbox" id="gen-lower" checked /> Lowercase
+              </label>
+              <label>
+                <input type="checkbox" id="gen-upper" checked /> Uppercase
+              </label>
+              <label>
+                <input type="checkbox" id="gen-digits" checked /> Digits
+              </label>
+              <label>
+                <input type="checkbox" id="gen-symbols" checked /> Symbols
+              </label>
+            </div>
+            <label class="gen-exclude">
+              <input type="checkbox" id="gen-exclude-ambiguous" checked /> Exclude ambiguous characters (1 l I 0 O)
+            </label>
+          </div>
+          <div class="gen-output-row">
+            <input id="gen-output" type="text" readonly placeholder="Click Generate" />
+            <button id="copy-gen-btn" class="btn btn-icon" type="button" aria-label="Copy generated password">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+              </svg>
+            </button>
+          </div>
+          <button id="generate-btn" class="btn btn-primary" type="button">
+            Generate Password
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div id="toast-container" class="toast-container"></div>
+
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
