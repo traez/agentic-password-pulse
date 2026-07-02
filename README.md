@@ -1,64 +1,61 @@
-# agentic-frequencies
+# Password Pulse
 
-Agentic-coded audio frequency generator. Vanilla HTML/CSS/JS
+A local, fast Password Strength Visualizer that provides deep analytical feedback beyond basic weak/strong metrics.
 
-## Table of contents
+## Setup
 
-- [Overview](#overview)
-  - [The challenge](#the-challenge)
-  - [Screenshot](#screenshot)
-  - [Links](#links)
-  - [My process](#my-process)
-  - [Built with](#built-with)
-  - [What I learned](#what-i-learned)
-  - [Continued development](#continued-development)
-  - [Useful resources](#useful-resources)
-  - [Author](#author)
-  - [Acknowledgments](#acknowledgments)
+```bash
+pnpm install
+pnpm dev       # Start dev server at http://localhost:5173
+pnpm build     # Type-check and build for production
+pnpm preview   # Preview production build
+```
 
-## Overview
+## How It Works
 
-### The Challenge/User Stories
+### Entropy Calculation
 
-This project is a deliberate sandbox to pressure-test my Agentic AI engineering workflow, and not about building a music app. The Web Audio API was chosen for its notoriously tricky constraints (gesture-locked audio contexts, oscillator lifecycles, real-time parameter modulation) that force AI agents to handle real-world edge cases rather than generate superficial code. The primary goal: ship functional software using AI agents as collaborative engineers, not just autocomplete, while practicing MCP integration, branch-based safety workflows, and plan-first prompting.
+Entropy is calculated using the formula `E = log₂(R^L)` where:
+- **R** = size of the active character pool (sum of detected character class sizes)
+- **L** = password length (counted by Unicode code points, not UTF-16 code units)
 
-### Screenshot
+Character pool sizes: lowercase (26), uppercase (26), digits (10), symbols (~33). Only pools actually present in the password contribute to R.
 
-![](/public/screenshot-app.png)
+The analysis engine then applies **pattern penalties** (repeated characters, sequential patterns, keyboard walks, dictionary words, date patterns, L33t substitutions) to derive **effective entropy**, which drives the strength meter and crack-time estimate.
 
-### Links
+### Crack-Time Estimation
 
-- Solution URL: [https://github.com/traez/agentic-frequencies](https://github.com/traez/agentic-frequencies)
-- Live Site URL: [https://agentic-frequencies.vercel.app](https://agentic-frequencies.vercel.app)
+Assumes an offline attack at **10 billion guesses/second**. The average-case crack time is `2^(E-1) / 10^10` seconds, displayed in the largest sensible unit (seconds → minutes → hours → days → years → centuries).
 
-## My process
+### Strength Tiers
 
-### Built with
+| Effective Entropy | Label |
+|-------------------|-------|
+| < 28 bits | Very Weak |
+| 28–35 bits | Weak |
+| 36–59 bits | Fair |
+| 60–79 bits | Strong |
+| ≥ 80 bits | Very Strong |
 
-- **Vanilla JavaScript (ES6+)** — No frameworks. Pure Web Audio API oscillator nodes for synthesis.
-- **HTML5/CSS3** — Custom CSS Grid for the 4x4 pad layout with responsive design.
-- **Web Audio API** — Core technology for `AudioContext`, `GainNode`, and real-time wave shaping (sine/square/triangle).
-- **Vercel** — Hosting and deployment.
+## Features
 
-### What I learned
+- **Real-time analysis** — live entropy, crack time, and checklist suggestions on every keystroke
+- **Pattern detection** — detects repeated chars, sequential patterns, QWERTY walks, dictionary words, dates, and L33t substitutions
+- **Password generator** — cryptographically secure (`crypto.getRandomValues`) with customizable length and character classes
+- **Clipboard copy** — works on HTTPS (`navigator.clipboard`) and HTTP (`document.execCommand` fallback)
+- **Dark/light theme** — follows OS preference via `prefers-color-scheme`
 
-Make reference to **Agentic AI - MCP** note in `My Drive` -> `Tech` -> `Software Development` in my Google Drive
+## Browser Requirements
 
-### Continued development
+Latest versions of Chrome, Firefox, Safari, and Edge. The Clipboard API fallback (`document.execCommand`) covers HTTP contexts.
 
-- More projects; increased competence!
+## Tech Stack
 
-### Useful resources
- 
-YouTube  
-Google  
-Artificial Intelligence
+- **Vite** — bundler and dev server
+- **Vanilla TypeScript** — no frontend frameworks
+- **Vanilla CSS** — no CSS utilities
+- **No external crypto or password-analysis libraries** — all logic implemented from scratch
 
 ## Author
 
-- Website - [Zeeofor Technologies](https://zeeofor.tech)
-- Twitter - [@trae_z](https://twitter.com/trae_z)
-
-## Acknowledgments
-
--Jehovah that keeps breath in my lungs
+- Website — [Zeeofor Technologies](https://zeeofor.tech)
